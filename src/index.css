@@ -1,0 +1,11 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Consolas", Courier, monospace;
+  background: linear-gradient(89deg, #c8ecb9 0%, #1d6300 100%);
+}
+
+button {
+	cursor: pointer;
+	background-color: #1d6300;
+}
