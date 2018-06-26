@@ -1,4 +1,5 @@
 import React from 'react';
+import './CreateUser.css';
 
 class CreateUser extends React.Component {
 	constructor(props) {
@@ -28,7 +29,7 @@ class CreateUser extends React.Component {
 			headers: {'Content-Type': 'application/json'},
 			body: JSON.stringify({
 				email: this.state.email,
-				password: this.state.signInPassword,
+				password: this.state.password,
 				name: this.state.name
 			})
 		})
@@ -92,9 +93,15 @@ class CreateUser extends React.Component {
 					</main>
 					</article>
 
-					<article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw5 shadow-3 center">
-						<p>Note: this app does not verify login credentials so you do not have to use any of your personal information. Example: <br />user: "john@john.com" <br />password: "123"</p>
+					<article className="text-box br3 ba b--black-10 mv4 shadow-3 center">
+					<div className="tc pa3">
+						<p>Note: this app does not verify login credentials so you do not have to use any of your personal information.</p>
+						<p>Example: 
+						<br />
+						user: "john@john.com" <br />password: "123"</p>
+					</div>
 					</article>
+
 				</div>
 		);
 	}

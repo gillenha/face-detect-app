@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
+import Particles from 'react-particles-js';
+import Clarifai from 'clarifai';
+import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 import Navigation from './components/Navigation/Navigation';
+import Signin from './components/Signin/Signin';
+import CreateUser from './components/CreateUser/CreateUser';
 import Logo from './components/Logo/Logo';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
-import FaceRecognition from './components/FaceRecognition/FaceRecognition';
-import Signin from './components/Signin/Signin';
-import CreateUser from './components/CreateUser/CreateUser';
-import Particles from 'react-particles-js';
-import Clarifai from 'clarifai';
 import './App.css';
 
 const app = new Clarifai.App({
@@ -26,43 +26,36 @@ const particlesOptions = {
   }
 }
 
+const initialState = {
+  input: '',
+  imageUrl: '',
+  box: {},
+  route: 'signin',
+  isSignedIn: false,
+  user: {
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: ''
+  }
+}
+
 class App extends Component {
   constructor() {
     super();
-
-    this.state = {
-      input: '',
-      imageUrl: '',
-      box: {},
-      route: 'signin',
-      isSignedIn: false,
-      user: {
-        email: '',
-        id: '',
-        name: '',
-        entries: 0,
-        joined: ''
-      }
-    }
+    this.state = initialState;
   }
 
   loadUser = (data) => {
     this.setState({user: {
-      email: data.email,
       id: data.id,
       name: data.name,
-      entries: 0,
+      email: data.email,
+      entries: data.entries,
       joined: data.joined
     }})
   }
-
-  // componentDidMount() {
-  //   fetch('http://localhost:3000')
-  //     .then(response => response.json())
-  //     .then(console.log)
-  // }
-
-  //fetch is working with npm cors installed
 
   calculateFaceLocation = (data) => {
     const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
@@ -90,8 +83,7 @@ class App extends Component {
     app.models
       .predict(
         Clarifai.FACE_DETECT_MODEL,
-        this.state.input
-      )
+        this.state.input)
       .then(response => {
         if (response) {
           fetch('http://localhost:3000/image', {
@@ -103,7 +95,7 @@ class App extends Component {
           })
             .then(response => response.json())
             .then(count => {
-              this.setState(Object.assign(this.state.user, { entries: count.entries }))
+              this.setState(Object.assign(this.state.user, { entries: count }))
             })
         }
         this.displayFaceBox(this.calculateFaceLocation(response))
@@ -113,7 +105,7 @@ class App extends Component {
 
   onRouteChange = (route) => {
     if (route === 'signout') {
-      this.setState({isSignedIn: false})
+      this.setState(initialState)
     } else if (route === 'home') {
       this.setState({isSignedIn: true})
     }
@@ -142,17 +134,11 @@ class App extends Component {
                 <FaceRecognition box={box} imageUrl={imageUrl}/>
               </div>
               : (
-                  this.state.route === 'signin' 
-                  ? <Signin 
-                      loadUser={this.loadUser} 
-                      onRouteChange={this.onRouteChange}/>
-                  : <CreateUser 
-                      loadUser={this.loadUser} 
-                      onRouteChange={this.onRouteChange}/>
+                  route === 'signin' 
+                  ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
+                  : <CreateUser loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
                 )
-
-            
-      }
+          }
       </div>
     );
   }

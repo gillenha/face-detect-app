@@ -1,4 +1,5 @@
 import React from 'react';
+import './Signin.css';
 
 class Signin extends React.Component {
 	constructor() {
@@ -30,7 +31,7 @@ class Signin extends React.Component {
 		.then(user => {
 			if (user.id) {
 				this.props.loadUser(user);
-				this.props.onRouteChange('home');		
+				this.props.onRouteChange('home');
 			}
 		})
 	}
@@ -79,8 +80,12 @@ class Signin extends React.Component {
 				  </div>
 				</main>
 				</article>
-				<article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw5 shadow-3 center">
-					<p>Note: this app does not verify login credentials so you do not have to use any of your personal information. Example: <br />user: "john@john.com" <br />password: "123"</p>
+				<article className="text-box br3 ba b--black-10 mv4 shadow-3 center">
+					<div className="tc pa3">
+					<p>Note: this is a sample app that is part of my portfolio, so if you'd like to log in just to see how it works, use:</p> 
+					<p className="tl ph6">email: "test@email.com" <br />password: "123"</p>
+					<p>You do not have to create a new user, however you may create a new user by using whichever credentials you'd like.</p>
+					</div>
 				</article>
 			</div>
 		);
